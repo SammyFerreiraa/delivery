@@ -6,9 +6,11 @@ import { Link } from 'expo-router'
 import { CATEGORIES, MENU } from '@/utils/data/products'
 import { useState, useRef } from 'react'
 import { Product } from '@/components/Product'
+import { useCartStore } from '@/stores/CardStore'
 
 export default function App() {
   const [category , setCategory] = useState(CATEGORIES[0])
+  const cartStore = useCartStore()
 
   const sectionListRef = useRef<SectionList>(null)
 
@@ -20,9 +22,12 @@ export default function App() {
       sectionListRef.current.scrollToLocation({ sectionIndex, itemIndex: 0, animated: true })
     }
   }
+
+  const cartQuantityItems = cartStore.products.reduce((total, item) => total + item.quantity, 0)
+
   return (
     <View className="flex-1 pt-8">
-      <Header title='Faça seu pedido' cartQuantity={5}/>
+      <Header title='Faça seu pedido' cartQuantity={cartQuantityItems}/>
 
       <FlatList data={CATEGORIES} keyExtractor={(item) => item}  horizontal  renderItem={({ item }) => <CategoryButton title={item} onPress={() => handleCategorySelect(item)} isSelected={item === category} />} className='max-h-10 mt-5' contentContainerStyle={{ gap: 12, paddingHorizontal: 20 }} showsHorizontalScrollIndicator={false} />
 
