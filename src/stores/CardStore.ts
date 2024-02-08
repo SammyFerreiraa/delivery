@@ -12,6 +12,7 @@ type StateProps = {
   products: ProductCartProps[]
   add: (product: ProductProps) => void
   remove: (productId: string) => void
+  clear: () => void
 }
 
 export const useCartStore = create(
@@ -22,7 +23,8 @@ persist<StateProps>((set) => ({
   })),
   remove: (productId: string) => set((state) => ({
     products: CartInMemory.remove(state.products, productId)
-  }))
+  })),
+  clear: () => set({ products: [] })
 }), {
   name: 'cart-storage',
   storage: createJSONStorage(() => AsyncStorage)
