@@ -4,7 +4,7 @@ import { Input } from "@/components/Input";
 import { Product } from "@/components/Product";
 import { ProductCartProps, useCartStore } from "@/stores/CardStore";
 import { formatCurrency } from "@/utils/functions/formatCurrency";
-import { View, Text, ScrollView, Alert } from "react-native";
+import { View, Text, ScrollView, Alert, Linking } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Feather } from "@expo/vector-icons";
 import { LinkButton } from "@/components/LinkButton";
@@ -15,6 +15,7 @@ export default function Cart() {
   const [address, setAddress] = useState('')
   const navigation = useNavigation()
   const cartStore = useCartStore()
+  const number = 5511111111111
 
   const total = formatCurrency(cartStore.products.reduce((acc, product) => acc + (product.price * product.quantity), 0))
 
@@ -33,19 +34,20 @@ export default function Cart() {
   const handleOrder = () => {
     if (address.trim().length === 0) {
       Alert.alert("Atenção", "Informe o endereço de entrega.")
+      return
     }
 
     const products = cartStore.products.map((product) => (
-      `/n ${product.quantity}x ${product.title}`
+      `\n ${product.quantity}x ${product.title}`
     )).join('')
 
     const message = `
     🍔 NOVO PEDIDO 🍔
-    /n Entregar em: ${address}
+    \n Entregar em: ${address}
     ${products}
-    /n ${total}
-    `
+    \n ${total}`
 
+    Linking.openURL(`http://api.whatsapp.com/send?phone=${number}&text=${message}`)
     cartStore.clear()
     navigation.goBack()
   }
