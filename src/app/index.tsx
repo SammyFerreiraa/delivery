@@ -1,11 +1,9 @@
-import { CategoryButton } from '@/components/CategoryButton'
 import { Header } from '@/components/Header'
 import { View, Text, FlatList, SectionList } from 'react-native'
 import { Link } from 'expo-router'
-
 import { CATEGORIES, MENU, ProductProps } from '@/utils/data/products'
 import { useState, useRef } from 'react'
-import { Product } from '@/components/Product'
+import { Product, CategoryButton } from '@/components'
 import { useCartStore } from '@/stores/CardStore'
 
 export default function App() {

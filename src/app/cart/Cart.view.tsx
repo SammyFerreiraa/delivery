@@ -1,57 +1,10 @@
-import { Button } from "@/components/Button";
-import { Header } from "@/components/Header";
-import { Input } from "@/components/Input";
-import { Product } from "@/components/Product";
-import { ProductCartProps, useCartStore } from "@/stores/CardStore";
-import { formatCurrency } from "@/utils/functions/formatCurrency";
-import { View, Text, ScrollView, Alert, Linking } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Feather } from "@expo/vector-icons";
-import { LinkButton } from "@/components/LinkButton";
-import { useState } from "react";
-import { useNavigation } from "expo-router";
+import useCartModel from "./Cart.model";
+import { Header, Button, Input, LinkButton, Product } from "@/components";
 
-export default function Cart() {
-  const [address, setAddress] = useState('')
-  const navigation = useNavigation()
-  const cartStore = useCartStore()
-  const number = 5511111111111
-
-  const total = formatCurrency(cartStore.products.reduce((acc, product) => acc + (product.price * product.quantity), 0))
-
-  const handleRemoveProduct = (product: ProductCartProps) => {
-    Alert.alert("Remover", `Deseja remover ${product.title} do carrinho?`, [
-      {
-        text: "Cancelar",
-      },
-      {
-        text: "Remover",
-        onPress: () => cartStore.remove(product.id),
-      }
-    ])
-  }
-
-  const handleOrder = () => {
-    if (address.trim().length === 0) {
-      Alert.alert("Atenção", "Informe o endereço de entrega.")
-      return
-    }
-
-    const products = cartStore.products.map((product) => (
-      `\n ${product.quantity}x ${product.title}`
-    )).join('')
-
-    const message = `
-    🍔 NOVO PEDIDO 🍔
-    \n Entregar em: ${address}
-    ${products}
-    \n ${total}`
-
-    Linking.openURL(`http://api.whatsapp.com/send?phone=${number}&text=${message}`)
-    cartStore.clear()
-    navigation.goBack()
-  }
-
+export default function CartView({ cartStore, setAddress, total, handleRemoveProduct, handleOrder } : ReturnType<typeof useCartModel>) {
   return (
     <View className="flex-1 pt-8">
       <Header title="Seu Carrinho"/>
