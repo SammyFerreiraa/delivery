@@ -3,7 +3,7 @@ import { Header } from '@/components/Header'
 import { View, Text, FlatList, SectionList } from 'react-native'
 import { Link } from 'expo-router'
 
-import { CATEGORIES, MENU } from '@/utils/data/products'
+import { CATEGORIES, MENU, ProductProps } from '@/utils/data/products'
 import { useState, useRef } from 'react'
 import { Product } from '@/components/Product'
 import { useCartStore } from '@/stores/CardStore'
@@ -12,7 +12,7 @@ export default function App() {
   const [category , setCategory] = useState(CATEGORIES[0])
   const cartStore = useCartStore()
 
-  const sectionListRef = useRef<SectionList>(null)
+  const sectionListRef = useRef<SectionList<ProductProps>>(null)
 
   const handleCategorySelect = (selectedCategory: string) => {
     setCategory(selectedCategory)
